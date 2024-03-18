@@ -27,8 +27,10 @@ class DioClient {
     }
   }
 
-  Future get(
-      {required String path, Map<String, dynamic>? queryParameters}) async {
+  Future get({
+    required String path,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       final response = await _dio.get(path, queryParameters: queryParameters);
 
