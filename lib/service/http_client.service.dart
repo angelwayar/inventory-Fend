@@ -16,10 +16,13 @@ class DioClient {
 
   Future<dynamic> post({
     required String path,
-    Map<String, dynamic>? data,
+    dynamic data,
   }) async {
     try {
-      final response = await _dio.post(path, data: data);
+      final response = await _dio.post(
+        path,
+        data: data,
+      );
 
       return response.data;
     } on DioException catch (e) {

@@ -21,5 +21,8 @@ class Injector {
     getIt.registerFactory(
       () => ProductBloc(getIt.get<DioClient>()),
     );
+    getIt.registerFactory(
+      () => RegisterProductBloc(getIt.get<DioClient>()),
+    );
   }
 }
