@@ -24,5 +24,8 @@ class Injector {
     getIt.registerFactory(
       () => RegisterProductBloc(getIt.get<DioClient>()),
     );
+    getIt.registerFactory(
+      () => DeleteBloc(getIt.get<DioClient>()),
+    );
   }
 }
