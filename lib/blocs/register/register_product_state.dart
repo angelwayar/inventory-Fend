@@ -1,6 +1,5 @@
 part of 'register_product_bloc.dart';
 
-@immutable
 sealed class RegisterProductState {
   const RegisterProductState();
 }

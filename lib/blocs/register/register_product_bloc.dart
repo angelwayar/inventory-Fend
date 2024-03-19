@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 
 import '../../models/models.dart';
 import '../../service/http_client.service.dart';

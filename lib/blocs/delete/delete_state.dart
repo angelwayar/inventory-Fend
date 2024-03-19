@@ -1,6 +1,5 @@
 part of 'delete_bloc.dart';
 
-@immutable
 sealed class DeleteState {
   const DeleteState();
 }
