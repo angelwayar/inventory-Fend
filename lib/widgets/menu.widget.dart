@@ -9,10 +9,14 @@ class MenuWidget extends StatefulWidget {
     super.key,
     required this.deleteProduct,
     required this.updateProduct,
+    required this.onPressedBack,
+    required this.onPressedForward,
   });
 
   final ValueChanged<bool> deleteProduct;
   final ValueChanged<bool> updateProduct;
+  final void Function()? onPressedBack;
+  final void Function()? onPressedForward;
 
   @override
   State<MenuWidget> createState() => _MenuWidgetState();
@@ -132,6 +136,21 @@ class _MenuWidgetState extends State<MenuWidget> {
               ),
             ),
           ),
+          const SizedBox(height: 24.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.arrow_back_ios),
+              ),
+              const Text('1...150'),
+              IconButton(
+                onPressed: widget.onPressedForward,
+                icon: const Icon(Icons.arrow_forward_ios),
+              ),
+            ],
+          )
         ],
       ),
     );

@@ -43,7 +43,7 @@ class DioClient {
     }
   }
 
-  Future put({required String path, Map<String, dynamic>? data}) async {
+  Future put({required String path, dynamic data}) async {
     try {
       final response = await _dio.put(path, data: data);
 
@@ -53,9 +53,12 @@ class DioClient {
     }
   }
 
-  Future delete({required String path}) async {
+  Future delete({required String path, dynamic queryParameters}) async {
     try {
-      final response = await _dio.delete(path);
+      final response = await _dio.delete(
+        path,
+        queryParameters: queryParameters,
+      );
 
       return response.data;
     } on DioException catch (e) {

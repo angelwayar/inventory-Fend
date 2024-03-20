@@ -1,19 +1,39 @@
 part of 'product_bloc.dart';
 
-sealed class ProductState {
-  const ProductState();
-}
+enum Status { inital, inProgress, success, failure }
 
-final class ProductLoadInProgress extends ProductState {
-  const ProductLoadInProgress();
-}
+class ProductState {
+  const ProductState({
+    this.result,
+    this.message,
+    this.page = 1,
+    this.perPage = 10,
+    this.hasReachedMax = false,
+    this.status = Status.inital,
+  });
 
-final class ProductLoadSuccess extends ProductState {
-  final List<ProductResult> products;
-  const ProductLoadSuccess({required this.products});
-}
+  final int page;
+  final int perPage;
+  final Status status;
+  final String? message;
+  final ProductResultBase? result;
+  final bool hasReachedMax;
 
-final class ProductFailure extends ProductState {
-  final String message;
-  const ProductFailure({required this.message});
+  ProductState copyWith({
+    int? page,
+    int? perPage,
+    Status? status,
+    String? message,
+    bool? hasReachedMax,
+    ProductResultBase? result,
+  }) {
+    return ProductState(
+      page: page ?? this.page,
+      status: status ?? this.status,
+      result: result ?? this.result,
+      message: message ?? this.message,
+      perPage: perPage ?? this.perPage,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
 }

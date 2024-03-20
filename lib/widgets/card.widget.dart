@@ -30,7 +30,7 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => widget.valueChanged(widget.productResult),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
@@ -121,18 +121,15 @@ class _CardWidgetState extends State<CardWidget> {
               children: [
                 TextInformationWidget(
                   label: 'Altura:',
-                  text:
-                      '${widget.productResult.height == null || widget.productResult.height == 'None' ? '' : widget.productResult.height}',
+                  text: '${widget.productResult.height ?? ''}',
                 ),
                 TextInformationWidget(
                   label: 'Ancho:',
-                  text:
-                      '${widget.productResult.width == null || widget.productResult.width == 'None' ? '' : widget.productResult.width}',
+                  text: '${widget.productResult.width ?? ''}',
                 ),
                 TextInformationWidget(
                   label: 'Grosor:',
-                  text:
-                      '${widget.productResult.depth == null || widget.productResult.depth == 'None' ? '' : widget.productResult.depth}',
+                  text: '${widget.productResult.depth ?? ''}',
                 ),
                 TextInformationWidget(
                   label: 'Description:',
