@@ -49,7 +49,8 @@ class _CardWidgetState extends State<CardWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if ((widget.productResult.images != null) ||
+            if ((widget.productResult.images != null) &&
+                (widget.productResult.images!.isNotEmpty) &&
                 (widget.productResult.images![0].isNotEmpty))
               ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -60,8 +61,9 @@ class _CardWidgetState extends State<CardWidget> {
                   imageFile(
                     base64Image: widget.productResult.images![0],
                   ),
+                  height: 280.0,
                   width: 400.0,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       height: 280.0,
@@ -85,6 +87,30 @@ class _CardWidgetState extends State<CardWidget> {
                       ),
                     );
                   },
+                ),
+              ),
+            if ((widget.productResult.images == null) ||
+                (widget.productResult.images!.isEmpty) ||
+                (widget.productResult.images![0].isEmpty))
+              Container(
+                height: 280.0,
+                width: 400.0,
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    bottomLeft: Radius.circular(15.0),
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'No tiene Imagen',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
               ),
             const SizedBox(width: 36.0),

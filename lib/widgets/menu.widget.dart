@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_fend/widgets/cubit/menu_cubit.dart';
 
+import '../blocs/blocs.dart';
 import '../pages/register/register_product.page.dart';
 
 class MenuWidget extends StatefulWidget {
   const MenuWidget({
     super.key,
+    required this.totalPages,
     required this.deleteProduct,
     required this.updateProduct,
-    required this.onPressedBack,
-    required this.onPressedForward,
   });
 
+  final int totalPages;
   final ValueChanged<bool> deleteProduct;
   final ValueChanged<bool> updateProduct;
-  final void Function()? onPressedBack;
-  final void Function()? onPressedForward;
 
   @override
   State<MenuWidget> createState() => _MenuWidgetState();
@@ -25,6 +25,7 @@ class MenuWidget extends StatefulWidget {
 class _MenuWidgetState extends State<MenuWidget> {
   bool delete = false;
   bool update = false;
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -137,20 +138,47 @@ class _MenuWidgetState extends State<MenuWidget> {
             ),
           ),
           const SizedBox(height: 24.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.arrow_back_ios),
-              ),
-              const Text('1...150'),
-              IconButton(
-                onPressed: widget.onPressedForward,
-                icon: const Icon(Icons.arrow_forward_ios),
-              ),
-            ],
-          )
+          Container(
+            height: 150.0,
+            width: 200.0,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.red),
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Total de páginas: ${widget.totalPages}',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 120.0,
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      labelText: 'Ingresar pagina',
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<ProductBloc>().add(
+                          ProductFetched(page: int.parse(controller.text)),
+                        );
+                  },
+                  child: const Text('Buscar pagina'),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

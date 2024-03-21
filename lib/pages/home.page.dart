@@ -41,11 +41,19 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Row(
           children: [
-            MenuWidget(
-              deleteProduct: (value) => isDeleteEnable = value,
-              updateProduct: (value) => isUpdateEnable = value,
-              onPressedBack: () => productBloc.add(const ProductFetched()),
-              onPressedForward: () => productBloc.add(const ProductFetched()),
+            BlocBuilder<ProductBloc, ProductState>(
+              buildWhen: (previous, current) =>
+                  previous.status == Status.inital &&
+                  current.status == Status.success,
+              builder: (context, state) {
+                return MenuWidget(
+                  totalPages: state.status == Status.success
+                      ? state.result!.totalPages
+                      : 0,
+                  deleteProduct: (value) => isDeleteEnable = value,
+                  updateProduct: (value) => isUpdateEnable = value,
+                );
+              },
             ),
             BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {

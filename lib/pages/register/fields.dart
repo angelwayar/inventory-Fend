@@ -15,6 +15,7 @@ class FieldWidget extends StatelessWidget {
     required this.depthController,
     required this.descriptionController,
     required this.images,
+    this.arrayImages,
   });
 
   final TextEditingController codeController;
@@ -25,6 +26,7 @@ class FieldWidget extends StatelessWidget {
   final TextEditingController widthController;
   final TextEditingController depthController;
   final TextEditingController descriptionController;
+  final List<String>? arrayImages;
   final ValueChanged<List<XFile>> images;
 
   @override
@@ -67,7 +69,10 @@ class FieldWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24.0),
                 ),
                 child: UploadImagesWidget(
-                  imagesSeleted: (value) => images(value),
+                  initialImages: arrayImages,
+                  imagesSeleted: (value) {
+                    images(value);
+                  },
                 ),
               ),
             ],
