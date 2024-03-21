@@ -122,20 +122,31 @@ class _MenuWidgetState extends State<MenuWidget> {
             },
           ),
           const SizedBox(height: 24.0),
-          ElevatedButton(
-            onPressed: () {},
-            style: const ButtonStyle(
-              minimumSize: MaterialStatePropertyAll<Size>(
-                Size(350.0, 80.0),
-              ),
-            ),
-            child: const Text(
-              'Listar items',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+          BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              return ElevatedButton(
+                onPressed: state.status == Status.inProgress
+                    ? null
+                    : () =>
+                        context.read<ProductBloc>().add(const ProductRefresh()),
+                style: const ButtonStyle(
+                  minimumSize: MaterialStatePropertyAll<Size>(
+                    Size(350.0, 80.0),
+                  ),
+                ),
+                child: state.status == Status.inProgress
+                    ? const CircularProgressIndicator(
+                        color: Colors.amber,
+                      )
+                    : const Text(
+                        'Listar items',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+              );
+            },
           ),
           const SizedBox(height: 24.0),
           Container(
@@ -168,13 +179,26 @@ class _MenuWidgetState extends State<MenuWidget> {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<ProductBloc>().add(
-                          ProductFetched(page: int.parse(controller.text)),
-                        );
+                BlocBuilder<ProductBloc, ProductState>(
+                  bloc: context.read<ProductBloc>(),
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      onPressed: state.status == Status.inProgress
+                          ? null
+                          : () {
+                              context.read<ProductBloc>().add(
+                                    ProductFetched(
+                                      page: int.parse(controller.text),
+                                    ),
+                                  );
+                            },
+                      child: state.status == Status.inProgress
+                          ? const CircularProgressIndicator(
+                              color: Colors.amber,
+                            )
+                          : const Text('Buscar pagina'),
+                    );
                   },
-                  child: const Text('Buscar pagina'),
                 ),
               ],
             ),

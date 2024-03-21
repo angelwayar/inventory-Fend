@@ -22,6 +22,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       _onProductFetched,
       transformer: throttleDroppable(throttleDuration),
     );
+    on<ProductRefresh>(_onProductRefresh);
   }
 
   final DioClient _dioClient;
@@ -58,6 +59,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         );
       }
       int? page = event.page;
+      if (page != null) {
+        emit(state.copyWith(status: Status.inProgress));
+      }
       final result = await _fetch(page: page);
       final products = <ProductResult>[];
       if (page != null) {
@@ -80,6 +84,28 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
                   products: products,
                 ),
               ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: Status.failure,
+          message: 'Error: $e',
+        ),
+      );
+    }
+  }
+
+  _onProductRefresh(ProductRefresh event, Emitter emit) async {
+    try {
+      emit(state.copyWith(status: Status.inProgress));
+      final result = await _fetch(page: 1);
+      emit(
+        state.copyWith(
+          result: result,
+          hasReachedMax: false,
+          page: 2,
+          status: Status.success,
+        ),
       );
     } catch (e) {
       emit(
