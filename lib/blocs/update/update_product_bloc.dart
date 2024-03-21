@@ -2,24 +2,23 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:inventory_fend/models/models.dart';
 
-import '../../models/models.dart';
 import '../../service/http_client.service.dart';
 
-part 'register_product_event.dart';
-part 'register_product_state.dart';
+part 'update_product_event.dart';
+part 'update_product_state.dart';
 
-class RegisterProductBloc
-    extends Bloc<RegisterProductEvent, RegisterProductState> {
-  RegisterProductBloc(this._dioClient) : super(const RegisterProductInitial()) {
-    on<RegisterProductSaved>(_onRegisterProductSaved);
+class UpdateProductBloc extends Bloc<UpdateProductEvent, UpdateProductState> {
+  UpdateProductBloc(this._dioClient) : super(const UpdateProductInitial()) {
+    on<UpdateProductSaved>(_onUpdateProductSaved);
   }
 
   final DioClient _dioClient;
 
-  _onRegisterProductSaved(RegisterProductSaved event, Emitter emit) async {
+  _onUpdateProductSaved(UpdateProductSaved event, Emitter emit) async {
     try {
-      emit(const RegisterProductInProgress());
+      emit(const UpdateProductInProgress());
       final jsonProduct = await event.productCommand.toJson();
       final jsonImages = jsonProduct['images'];
       final targetMap = {};
@@ -40,14 +39,10 @@ class RegisterProductBloc
         formData.fields.removeAt(1);
       }
 
-      await _dioClient.post(
-        path: '/products/save',
-        data: formData,
-      );
-
-      emit(const RegisterProductLoadSuccess());
+      await _dioClient.put(path: '/products/${event.id}/', data: formData);
+      emit(const UpdateProductLoadSuccess());
     } catch (e) {
-      emit(RegisterProductFailure(message: 'Eerro: $e'));
+      emit(UpdateProductFailure(message: 'Error: $e'));
     }
   }
 }

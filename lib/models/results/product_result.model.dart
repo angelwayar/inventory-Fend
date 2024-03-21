@@ -35,7 +35,9 @@ class ProductResult {
         width: json["width"],
         depth: json["depth"],
         retail: json["retail"],
-        images: List<String>.from(json["images"]?.map((x) => x)),
+        images: json["images"] == null
+            ? null
+            : List<String>.from(json["images"]?.map((x) => x)),
         brand: json["brand"] == 'None' ? null : json["brand"],
       );
 }

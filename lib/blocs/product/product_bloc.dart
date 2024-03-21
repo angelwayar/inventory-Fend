@@ -26,17 +26,25 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   final DioClient _dioClient;
 
-  Future<ProductResultBase> _fetch() async {
-    final queryParameters = {'page': state.page, 'per_page': state.perPage};
+  Future<ProductResultBase> _fetch({int? page}) async {
+    int page_ = 0;
+    if (page != null && page <= state.result!.totalPages) {
+      page_ = page;
+    } else if (page == null) {
+      page_ = state.page;
+    }
+
+    final queryParameters = {'page': page_, 'per_page': state.perPage};
     final response = await _dioClient.get(
       path: '/products/',
       queryParameters: queryParameters,
     );
+
     return ProductResultBase.fromJson(response);
   }
 
   _onProductFetched(ProductFetched event, Emitter emit) async {
-    if (state.hasReachedMax) return;
+    if ((state.hasReachedMax) && (event.page == null)) return;
     try {
       if (state.status == Status.inital) {
         final result = await _fetch();
@@ -49,17 +57,28 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           ),
         );
       }
-      final result = await _fetch();
+      int? page = event.page;
+      final result = await _fetch(page: page);
+      final products = <ProductResult>[];
+      if (page != null) {
+        page = page + 1;
+        products.addAll(result.products);
+      } else {
+        page = state.page + 1;
+        products.addAll(
+          List.of(state.result!.products)..addAll(result.products),
+        );
+      }
       emit(
         result.products.isEmpty
             ? state.copyWith(hasReachedMax: true)
             : state.copyWith(
-                status: Status.success,
-                result: state.result!.copyWith(
-                  products: List.of(state.result!.products)
-                    ..addAll(result.products),
-                ),
                 hasReachedMax: false,
+                status: Status.success,
+                page: page,
+                result: state.result!.copyWith(
+                  products: products,
+                ),
               ),
       );
     } catch (e) {
