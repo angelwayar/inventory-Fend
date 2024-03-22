@@ -29,7 +29,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<ProductResultBase> _fetch({int? page}) async {
     int page_ = 0;
-    if (page != null && page <= state.result!.totalPages) {
+    if (page != null) {
       page_ = page;
     } else if (page == null) {
       page_ = state.page;

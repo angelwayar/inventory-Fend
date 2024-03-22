@@ -92,7 +92,7 @@ class _ListProductContentState extends State<ListProductContent> {
               : widget.products.length + 1,
           itemBuilder: (context, index) {
             if (index >= widget.products.length) {
-              return const CircularProgressIndicator();
+              return const LinearProgressIndicator();
             }
             final productResult = widget.products[index];
             return Padding(

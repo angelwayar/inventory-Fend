@@ -75,11 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (state.status == Status.success) {
                             final products = state.result?.products;
 
-                            return ListProductContent(
-                              products: products ?? [],
-                              isDeleteEnable: isDeleteEnable,
-                              isUpdateEnable: isUpdateEnable,
-                              hasReachedMax: state.hasReachedMax,
+                            return Flexible(
+                              child: ListProductContent(
+                                products: products ?? [],
+                                isDeleteEnable: isDeleteEnable,
+                                isUpdateEnable: isUpdateEnable,
+                                hasReachedMax: state.hasReachedMax,
+                              ),
                             );
                           } else if (state.status == Status.failure) {
                             return Center(
