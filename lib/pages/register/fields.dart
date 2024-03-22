@@ -32,40 +32,89 @@ class FieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: codeController,
-                decoration: const InputDecoration(
-                  labelText: 'Código',
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
+                child: Text(
+                  'DETALLES',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple[900],
+                  ),
                 ),
               ),
-              TextField(
-                controller: supplierController,
-                decoration: const InputDecoration(
-                  labelText: 'Proveedor',
+              Container(
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFFC2261B),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: codeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Código',
+                      ),
+                    ),
+                    TextField(
+                      controller: supplierController,
+                      decoration: const InputDecoration(
+                        labelText: 'Proveedor',
+                      ),
+                    ),
+                    TextField(
+                      controller: yearController,
+                      decoration: const InputDecoration(
+                        labelText: 'Año',
+                      ),
+                    ),
+                    TextField(
+                      controller: brandController,
+                      decoration: const InputDecoration(
+                        labelText: 'Marca',
+                      ),
+                    ),
+                    TextField(
+                      controller: descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Descripción',
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                  ],
                 ),
               ),
-              TextField(
-                controller: yearController,
-                decoration: const InputDecoration(
-                  labelText: 'Año',
+              const SizedBox(height: 24.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
+                child: Text(
+                  'IMAGENES',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple[900],
+                  ),
                 ),
               ),
-              TextField(
-                controller: brandController,
-                decoration: const InputDecoration(
-                  labelText: 'Marca',
-                ),
-              ),
-              const SizedBox(height: 32.0),
               Container(
                 height: 320.0,
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red),
+                  border: Border.all(
+                    color: const Color(0xFFC2261B),
+                    width: 2,
+                  ),
                   borderRadius: BorderRadius.circular(24.0),
                 ),
                 child: UploadImagesWidget(
@@ -81,29 +130,51 @@ class FieldWidget extends StatelessWidget {
         const SizedBox(width: 24.0),
         Expanded(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: heightController,
-                decoration: const InputDecoration(
-                  labelText: 'Altura',
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
+                child: Text(
+                  'DIMENSIONES',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple[900],
+                  ),
                 ),
               ),
-              TextField(
-                controller: widthController,
-                decoration: const InputDecoration(
-                  labelText: 'Ancho',
+              Container(
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFFC2261B),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(24.0),
                 ),
-              ),
-              TextField(
-                controller: depthController,
-                decoration: const InputDecoration(
-                  labelText: 'Grosor',
-                ),
-              ),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Descripción',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: heightController,
+                      decoration: const InputDecoration(
+                        labelText: 'Altura',
+                      ),
+                    ),
+                    TextField(
+                      controller: widthController,
+                      decoration: const InputDecoration(
+                        labelText: 'Ancho',
+                      ),
+                    ),
+                    TextField(
+                      controller: depthController,
+                      decoration: const InputDecoration(
+                        labelText: 'Grosor',
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                  ],
                 ),
               ),
             ],

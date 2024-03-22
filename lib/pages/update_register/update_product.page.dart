@@ -125,57 +125,70 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Form(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  FieldWidget(
-                    codeController: codeController,
-                    supplierController: supplierController,
-                    yearController: yearController,
-                    brandController: brandController,
-                    heightController: heightController,
-                    widthController: widthController,
-                    depthController: depthController,
-                    descriptionController: descriptionController,
-                    arrayImages: widget.productResult.images,
-                    images: (value) {
-                      productCommand = productCommand.copyWith(images: value);
-                    },
-                  ),
-                  BlocBuilder<UpdateProductBloc, UpdateProductState>(
-                    builder: (context, state) {
-                      return ElevatedButton(
-                        onPressed: state is UpdateProductInProgress
-                            ? null
-                            : () {
-                                context
-                                    .read<UpdateProductBloc>()
-                                    .add(UpdateProductSaved(
-                                      id: widget.productResult.id,
-                                      productCommand: productCommand,
-                                    ));
-                              },
-                        style: const ButtonStyle(
-                          minimumSize: MaterialStatePropertyAll<Size>(
-                            Size(350.0, 80.0),
+            padding: const EdgeInsets.only(left: 24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Form(
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 24.0),
+                          child: FieldWidget(
+                            codeController: codeController,
+                            supplierController: supplierController,
+                            yearController: yearController,
+                            brandController: brandController,
+                            heightController: heightController,
+                            widthController: widthController,
+                            depthController: depthController,
+                            descriptionController: descriptionController,
+                            arrayImages: widget.productResult.images,
+                            images: (value) {
+                              productCommand =
+                                  productCommand.copyWith(images: value);
+                            },
                           ),
                         ),
-                        child: state is UpdateProductInProgress
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                'Actualizar',
-                                style: TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                BlocBuilder<UpdateProductBloc, UpdateProductState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      onPressed: state is UpdateProductInProgress
+                          ? null
+                          : () {
+                              context
+                                  .read<UpdateProductBloc>()
+                                  .add(UpdateProductSaved(
+                                    id: widget.productResult.id,
+                                    productCommand: productCommand,
+                                  ));
+                            },
+                      style: const ButtonStyle(
+                        minimumSize: MaterialStatePropertyAll<Size>(
+                          Size(350.0, 80.0),
+                        ),
+                        maximumSize: MaterialStatePropertyAll<Size>(
+                          Size(350.0, 80.0),
+                        ),
+                      ),
+                      child: state is UpdateProductInProgress
+                          ? const CircularProgressIndicator()
+                          : const Text(
+                              'Actualizar',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
