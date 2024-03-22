@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../models/models.dart';
+import '../utils/image.util.dart';
 import 'widgets.dart';
 
 class ImageContentWidget extends StatelessWidget {
@@ -13,11 +11,6 @@ class ImageContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Uint8List imageFile({required String base64Image}) {
-      Uint8List bytes = base64Decode(base64Image);
-      return bytes;
-    }
-
     if ((productResult.images != null) &&
         (productResult.images!.isNotEmpty) &&
         (productResult.images![0].isNotEmpty)) {

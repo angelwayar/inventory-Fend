@@ -52,13 +52,19 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
     yearController = TextEditingController(text: productCommand.year);
     brandController = TextEditingController(text: productCommand.brand);
     heightController = TextEditingController(
-      text: productCommand.height.toString(),
+      text: productCommand.height == null
+          ? '0.0'
+          : productCommand.height.toString(),
     );
     widthController = TextEditingController(
-      text: productCommand.width.toString(),
+      text: productCommand.width == null
+          ? '0.0'
+          : productCommand.width.toString(),
     );
     depthController = TextEditingController(
-      text: productCommand.depth.toString(),
+      text: productCommand.depth == null
+          ? '0.0'
+          : productCommand.depth.toString(),
     );
     descriptionController = TextEditingController(
       text: productCommand.description,

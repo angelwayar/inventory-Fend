@@ -25,12 +25,13 @@ class ListProductContent extends StatefulWidget {
 }
 
 class _ListProductContentState extends State<ListProductContent> {
-  var submit;
+  late Function submit;
   final scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    submit = popup;
     scrollController.addListener(_onScroll);
   }
 
@@ -51,6 +52,10 @@ class _ListProductContentState extends State<ListProductContent> {
     final maxScroll = scrollController.position.maxScrollExtent;
     final currentScroll = scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void popup(ProductResult value) {
+    customShowDialog(context: context, images: value.images);
   }
 
   delete(ProductResult value) {
@@ -75,8 +80,7 @@ class _ListProductContentState extends State<ListProductContent> {
         } else if (state.enableUpdate) {
           submit = update;
         } else {
-          //TODO: Mostrar popup de images
-          submit = null;
+          submit = popup;
         }
       },
       child: Padding(
@@ -96,9 +100,7 @@ class _ListProductContentState extends State<ListProductContent> {
               child: CardWidget(
                 productResult: productResult,
                 valueChanged: (value) {
-                  if (submit != null) {
-                    submit(value);
-                  }
+                  submit(value);
                 },
               ),
             );
