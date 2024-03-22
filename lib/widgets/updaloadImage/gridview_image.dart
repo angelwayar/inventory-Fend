@@ -43,27 +43,7 @@ class _GridViewImageWidgetState extends State<GridViewImageWidget> {
                       File(image),
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 280.0,
-                          width: 400.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15.0),
-                              bottomLeft: Radius.circular(15.0),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'No tiene Imagen',
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        );
+                        return const ErrorImage();
                       },
                     );
                   });
@@ -82,27 +62,7 @@ class _GridViewImageWidgetState extends State<GridViewImageWidget> {
                       width: 150.0,
                       fit: BoxFit.scaleDown,
                       errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 280.0,
-                          width: 400.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15.0),
-                              bottomLeft: Radius.circular(15.0),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'No tiene Imagen',
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        );
+                        return const ErrorImage();
                       },
                     ),
                   ),
@@ -114,9 +74,7 @@ class _GridViewImageWidgetState extends State<GridViewImageWidget> {
                     onPressed: () {
                       setState(() {
                         widget.images.removeAt(index - 1);
-                        // if (widget.images.isEmpty) {
                         widget.isEmptyGridViewImageWidget(widget.images);
-                        // }
                       });
                     },
                     icon: const Icon(

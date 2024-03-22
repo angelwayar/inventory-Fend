@@ -13,7 +13,7 @@ class TextInformationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
@@ -24,11 +24,15 @@ class TextInformationWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12.0),
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w400,
+        Flexible(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w400,
+              overflow: TextOverflow.ellipsis,
+            ),
+            maxLines: 5,
           ),
         ),
       ],

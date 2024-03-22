@@ -25,186 +25,216 @@ class MenuWidget extends StatefulWidget {
 class _MenuWidgetState extends State<MenuWidget> {
   bool delete = false;
   bool update = false;
+  final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
 
   @override
+  void initState() {
+    controller.addListener(() {
+      if (controller.text.isNotEmpty) {
+        final value = int.parse(controller.text);
+        if (value < 1) {
+          controller.text = '1';
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width * 0.3,
-      decoration: const BoxDecoration(
-        color: Colors.grey,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 4,
-            offset: Offset(2, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 24.0),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const RegisterProductPage(),
-                ),
-              );
-            },
-            style: const ButtonStyle(
-              minimumSize: MaterialStatePropertyAll<Size>(
-                Size(350.0, 80.0),
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      children: [
+        const SizedBox(height: 24.0),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const RegisterProductPage(),
               ),
-            ),
-            child: const Text(
-              'Agregar item',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.w400,
-              ),
+            );
+          },
+          style: const ButtonStyle(
+            minimumSize: MaterialStatePropertyAll<Size>(
+              Size(350.0, 80.0),
             ),
           ),
-          const SizedBox(height: 24.0),
-          BlocBuilder<MenuCubit, MenuState>(
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<MenuCubit>()
-                      .enableUpdate(value: !state.enableUpdate);
-                },
-                style: ButtonStyle(
-                  minimumSize: const MaterialStatePropertyAll<Size>(
-                    Size(350.0, 80.0),
-                  ),
-                  backgroundColor: state.enableUpdate
-                      ? const MaterialStatePropertyAll<Color>(Colors.amber)
-                      : null,
-                ),
-                child: const Text(
-                  'Editar item',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              );
-            },
+          child: const Text(
+            'Agregar item',
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-          const SizedBox(height: 24.0),
-          BlocBuilder<MenuCubit, MenuState>(
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<MenuCubit>()
-                      .enableDelete(value: !state.enableDelete);
-                },
-                style: ButtonStyle(
-                  minimumSize: const MaterialStatePropertyAll<Size>(
-                    Size(350.0, 80.0),
-                  ),
-                  backgroundColor: state.enableDelete
-                      ? MaterialStatePropertyAll<Color>(Colors.red[600]!)
-                      : null,
+        ),
+        const SizedBox(height: 24.0),
+        BlocBuilder<MenuCubit, MenuState>(
+          builder: (context, state) {
+            return ElevatedButton(
+              onPressed: () {
+                context
+                    .read<MenuCubit>()
+                    .enableUpdate(value: !state.enableUpdate);
+              },
+              style: ButtonStyle(
+                minimumSize: const MaterialStatePropertyAll<Size>(
+                  Size(350.0, 80.0),
                 ),
-                child: const Text(
-                  'Eliminar item',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.w400,
-                  ),
+                backgroundColor: state.enableUpdate
+                    ? const MaterialStatePropertyAll<Color>(Colors.amber)
+                    : null,
+              ),
+              child: Text(
+                'Editar item',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color: state.enableUpdate ? Colors.white : null,
+                  fontWeight: FontWeight.w400,
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: 24.0),
-          BlocBuilder<ProductBloc, ProductState>(
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: state.status == Status.inProgress
-                    ? null
-                    : () =>
-                        context.read<ProductBloc>().add(const ProductRefresh()),
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll<Size>(
-                    Size(350.0, 80.0),
-                  ),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 24.0),
+        BlocBuilder<MenuCubit, MenuState>(
+          builder: (context, state) {
+            return ElevatedButton(
+              onPressed: () {
+                context
+                    .read<MenuCubit>()
+                    .enableDelete(value: !state.enableDelete);
+              },
+              style: ButtonStyle(
+                minimumSize: const MaterialStatePropertyAll<Size>(
+                  Size(350.0, 80.0),
                 ),
-                child: state.status == Status.inProgress
-                    ? const CircularProgressIndicator(
-                        color: Colors.amber,
-                      )
-                    : const Text(
-                        'Listar items',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w400,
-                        ),
+                backgroundColor: state.enableDelete
+                    ? MaterialStatePropertyAll<Color>(Colors.red[600]!)
+                    : null,
+              ),
+              child: Text(
+                'Eliminar item',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color: state.enableDelete ? Colors.white : null,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 24.0),
+        BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            return ElevatedButton(
+              onPressed: state.status == Status.inProgress
+                  ? null
+                  : () =>
+                      context.read<ProductBloc>().add(const ProductRefresh()),
+              style: const ButtonStyle(
+                minimumSize: MaterialStatePropertyAll<Size>(
+                  Size(350.0, 80.0),
+                ),
+              ),
+              child: state.status == Status.inProgress
+                  ? const CircularProgressIndicator()
+                  : const Text(
+                      'Listar items',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w400,
                       ),
-              );
-            },
-          ),
-          const SizedBox(height: 24.0),
-          Container(
-            height: 150.0,
-            width: 200.0,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.red),
-              borderRadius: BorderRadius.circular(24.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Total de páginas: ${widget.totalPages}',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(
-                  width: 120.0,
-                  child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      labelText: 'Ingresar pagina',
                     ),
+            );
+          },
+        ),
+        const SizedBox(height: 24.0),
+        Container(
+          height: 180.0,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xFFC2261B),
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Total de páginas: ${widget.totalPages}',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.deepPurple[600],
+                ),
+              ),
+              SizedBox(
+                width: 120.0,
+                child: Form(
+                  key: formKey,
+                  child: TextFormField(
+                    controller: controller,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      labelText: 'Ingresar página',
+                      labelStyle: TextStyle(color: Colors.deepPurple[600]),
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Ingresar una valor.';
+                      } else {
+                        final page = int.parse(value);
+                        if (page > widget.totalPages) {
+                          return 'El número de página\ntiene que ser menor.';
+                        }
+                      }
+                      return null;
+                    },
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                   ),
                 ),
-                BlocBuilder<ProductBloc, ProductState>(
-                  bloc: context.read<ProductBloc>(),
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      onPressed: state.status == Status.inProgress
-                          ? null
-                          : () {
-                              context.read<ProductBloc>().add(
-                                    ProductFetched(
-                                      page: int.parse(controller.text),
-                                    ),
-                                  );
-                            },
-                      child: state.status == Status.inProgress
-                          ? const CircularProgressIndicator(
-                              color: Colors.amber,
-                            )
-                          : const Text('Buscar pagina'),
-                    );
-                  },
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 6.0),
+              BlocBuilder<ProductBloc, ProductState>(
+                bloc: context.read<ProductBloc>(),
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: state.status == Status.inProgress
+                        ? null
+                        : () {
+                            if (formKey.currentState!.validate()) {
+                              if (controller.text.isNotEmpty) {
+                                context.read<ProductBloc>().add(
+                                      ProductFetched(
+                                        page: int.parse(controller.text),
+                                      ),
+                                    );
+                              }
+                            }
+                          },
+                    child: state.status == Status.inProgress
+                        ? const CircularProgressIndicator()
+                        : const Text('Buscar página'),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

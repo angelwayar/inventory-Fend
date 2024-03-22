@@ -43,52 +43,64 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          ),
-          body: Row(
+          body: Column(
             children: [
-              BlocBuilder<ProductBloc, ProductState>(
-                buildWhen: (previous, current) =>
-                    previous.status == Status.inital &&
-                    current.status == Status.success,
-                builder: (context, state) {
-                  return MenuWidget(
-                    totalPages: state.status == Status.success
-                        ? state.result!.totalPages
-                        : 0,
-                    deleteProduct: (value) => isDeleteEnable = value,
-                    updateProduct: (value) => isUpdateEnable = value,
-                  );
-                },
-              ),
-              BlocBuilder<ProductBloc, ProductState>(
-                builder: (context, state) {
-                  if (state.status == Status.success) {
-                    final products = state.result?.products;
+              const HeaderWidget(),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 350.0,
+                      child: BlocBuilder<ProductBloc, ProductState>(
+                        buildWhen: (previous, current) =>
+                            previous.status == Status.inital &&
+                            current.status == Status.success,
+                        builder: (context, state) {
+                          return MenuWidget(
+                            totalPages: state.status == Status.success
+                                ? state.result!.totalPages
+                                : 0,
+                            deleteProduct: (value) => isDeleteEnable = value,
+                            updateProduct: (value) => isUpdateEnable = value,
+                          );
+                        },
+                      ),
+                    ),
+                    const VerticalDivider(),
+                    Flexible(
+                      flex: 3,
+                      child: BlocBuilder<ProductBloc, ProductState>(
+                        builder: (context, state) {
+                          if (state.status == Status.success) {
+                            final products = state.result?.products;
 
-                    return Expanded(
-                      child: ListProductContent(
-                        products: products ?? [],
-                        isDeleteEnable: isDeleteEnable,
-                        isUpdateEnable: isUpdateEnable,
-                        hasReachedMax: state.hasReachedMax,
+                            return ListProductContent(
+                              products: products ?? [],
+                              isDeleteEnable: isDeleteEnable,
+                              isUpdateEnable: isUpdateEnable,
+                              hasReachedMax: state.hasReachedMax,
+                            );
+                          } else if (state.status == Status.failure) {
+                            return Center(
+                              child: Text(
+                                '${state.message}',
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.red[900],
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            );
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
                       ),
-                    );
-                  } else if (state.status == Status.failure) {
-                    return Center(
-                      child: Text(
-                        '${state.message}',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.red[900],
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    );
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

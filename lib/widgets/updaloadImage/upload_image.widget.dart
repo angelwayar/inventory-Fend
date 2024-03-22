@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../widgets.dart';
+
 part 'gridview_image.dart';
 
 class UploadImagesWidget extends StatefulWidget {
@@ -78,13 +80,7 @@ class _UploadImagesWidgetState extends State<UploadImagesWidget> {
       return GridViewImageWidget(
         images: imageList,
         isEmptyGridViewImageWidget: (value) {
-          // log('isEmptyGridViewImageWidget');
-          // log('Tamaño: ${value.length}');
           widget.imagesSeleted(value);
-          // if (value.isEmpty) {
-          // setState(() {
-          // });
-          // }
         },
       );
     }
