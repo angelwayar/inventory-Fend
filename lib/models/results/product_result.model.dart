@@ -9,6 +9,8 @@ class ProductResult {
     required this.width,
     required this.depth,
     required this.retail,
+    required this.wholesaleRetail,
+    required this.wholesaleMajor,
     required this.images,
     required this.brand,
   });
@@ -22,6 +24,8 @@ class ProductResult {
   final double? width;
   final double? depth;
   final double? retail;
+  final double? wholesaleRetail;
+  final double? wholesaleMajor;
   final List<String>? images;
   final String? brand;
 
@@ -35,6 +39,8 @@ class ProductResult {
         width: json["width"],
         depth: json["depth"],
         retail: json["retail"],
+        wholesaleRetail: json["min"],
+        wholesaleMajor: json["max"],
         images: json["images"] == null
             ? null
             : List<String>.from(json["images"]?.map((x) => x)),

@@ -5,6 +5,7 @@ import 'package:inventory_fend/pages/register/fields.dart';
 
 import '../../blocs/blocs.dart';
 import '../../injection.dart';
+import '../../utils/convert_base64_to_XFile.util.dart';
 import '../home.page.dart';
 
 class UpdateProductPage extends StatefulWidget {
@@ -28,6 +29,9 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
   late final TextEditingController heightController;
   late final TextEditingController widthController;
   late final TextEditingController depthController;
+  late final TextEditingController retailController;
+  late final TextEditingController wholesaleRetailController;
+  late final TextEditingController wholesaleMajorController;
   late final TextEditingController descriptionController;
 
   @override
@@ -41,6 +45,8 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
       width: widget.productResult.width,
       depth: widget.productResult.depth,
       retail: widget.productResult.retail,
+      wholesaleRetail: widget.productResult.wholesaleRetail,
+      wholesaleMajor: widget.productResult.wholesaleMajor,
       brand: widget.productResult.brand,
       images: [],
     );
@@ -65,6 +71,21 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
       text: productCommand.depth == null
           ? '0.0'
           : productCommand.depth.toString(),
+    );
+    retailController = TextEditingController(
+      text: productCommand.retail == null
+          ? '0.0'
+          : productCommand.retail.toString(),
+    );
+    wholesaleRetailController = TextEditingController(
+      text: productCommand.wholesaleRetail == null
+          ? '0.0'
+          : productCommand.wholesaleRetail.toString(),
+    );
+    wholesaleMajorController = TextEditingController(
+      text: productCommand.wholesaleMajor == null
+          ? '0.0'
+          : productCommand.wholesaleMajor.toString(),
     );
     descriptionController = TextEditingController(
       text: productCommand.description,
@@ -105,12 +126,51 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
             : double.parse(depthController.text),
       );
     });
+    retailController.addListener(() {
+      productCommand = productCommand.copyWith(
+        retail: retailController.text.isEmpty
+            ? 0.0
+            : double.parse(retailController.text),
+      );
+    });
+    wholesaleRetailController.addListener(() {
+      productCommand = productCommand.copyWith(
+        wholesaleRetail: wholesaleRetailController.text.isEmpty
+            ? 0.0
+            : double.parse(wholesaleRetailController.text),
+      );
+    });
+    wholesaleMajorController.addListener(() {
+      productCommand = productCommand.copyWith(
+        wholesaleMajor: wholesaleMajorController.text.isEmpty
+            ? 0.0
+            : double.parse(wholesaleMajorController.text),
+      );
+    });
     descriptionController.addListener(() {
       productCommand = productCommand.copyWith(
         description: descriptionController.text,
       );
     });
+    loadImages();
     super.initState();
+  }
+
+  void loadImages() async {
+    for (var element in widget.productResult.images ?? []) {
+      final img = await base64ToXFile(element);
+      if (img != null) {
+        if (productCommand.images == null || productCommand.images!.isEmpty) {
+          productCommand = productCommand.copyWith(
+            images: [img],
+          );
+        } else {
+          productCommand = productCommand.copyWith(
+            images: [...productCommand.images!, img],
+          );
+        }
+      }
+    }
   }
 
   @override
@@ -149,11 +209,16 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
                             heightController: heightController,
                             widthController: widthController,
                             depthController: depthController,
+                            retailController: retailController,
+                            wholesaleRetailController:
+                                wholesaleRetailController,
+                            wholesaleMajorController: wholesaleMajorController,
                             descriptionController: descriptionController,
                             arrayImages: widget.productResult.images,
                             images: (value) {
-                              productCommand =
-                                  productCommand.copyWith(images: value);
+                              productCommand = productCommand.copyWith(
+                                images: value,
+                              );
                             },
                           ),
                         ),
@@ -174,12 +239,15 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
                                     productCommand: productCommand,
                                   ));
                             },
-                      style: const ButtonStyle(
-                        minimumSize: MaterialStatePropertyAll<Size>(
+                      style: ButtonStyle(
+                        minimumSize: const MaterialStatePropertyAll<Size>(
                           Size(350.0, 80.0),
                         ),
-                        maximumSize: MaterialStatePropertyAll<Size>(
+                        maximumSize: const MaterialStatePropertyAll<Size>(
                           Size(350.0, 80.0),
+                        ),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                          Colors.amber[400]!,
                         ),
                       ),
                       child: state is UpdateProductInProgress
@@ -188,12 +256,13 @@ class _RegisterProductPageState extends State<UpdateProductPage> {
                               'Actualizar',
                               style: TextStyle(
                                 fontSize: 24.0,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                     );
                   },
                 ),
+                const SizedBox(height: 32.0),
               ],
             ),
           ),

@@ -10,6 +10,8 @@ class ProductCommand {
   final double? width;
   final double? depth;
   final double? retail;
+  final double? wholesaleRetail;
+  final double? wholesaleMajor;
   final List<XFile>? images;
   final String? brand;
 
@@ -22,6 +24,8 @@ class ProductCommand {
     required this.width,
     required this.depth,
     required this.retail,
+    required this.wholesaleRetail,
+    required this.wholesaleMajor,
     required this.images,
     required this.brand,
   });
@@ -46,6 +50,8 @@ class ProductCommand {
       "width": width,
       "depth": depth,
       "retail": retail,
+      "min": wholesaleRetail,
+      "max": wholesaleMajor,
       "images": imageFile.isEmpty ? null : imageFile,
       "brand": brand,
     };
@@ -60,6 +66,8 @@ class ProductCommand {
     double? width,
     double? depth,
     double? retail,
+    double? wholesaleRetail,
+    double? wholesaleMajor,
     List<XFile>? images,
     String? brand,
   }) {
@@ -72,6 +80,8 @@ class ProductCommand {
       width: width ?? this.width,
       depth: depth ?? this.depth,
       retail: retail ?? this.retail,
+      wholesaleRetail: wholesaleRetail ?? this.wholesaleRetail,
+      wholesaleMajor: wholesaleMajor ?? this.wholesaleMajor,
       images: images ?? this.images,
       brand: brand ?? this.brand,
     );

@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
+import '../../utils/convert_base64_to_XFile.util.dart';
 import '../widgets.dart';
 
 part 'gridview_image.dart';
@@ -44,25 +43,6 @@ class _UploadImagesWidgetState extends State<UploadImagesWidget> {
           imageList.add(img);
         });
       }
-    }
-  }
-
-  Future<XFile?> base64ToXFile(String base64Image) async {
-    try {
-      List<int> bytes = base64.decode(base64Image);
-      final tempDir = await getTemporaryDirectory();
-      final tempPath = tempDir.path;
-
-      String tempFileName = DateTime.now().millisecondsSinceEpoch.toString();
-      String tempFilePath = '$tempPath/$tempFileName.png';
-
-      await File(tempFilePath).writeAsBytes(bytes);
-
-      XFile xFile = XFile(tempFilePath);
-
-      return xFile;
-    } catch (e) {
-      return null;
     }
   }
 

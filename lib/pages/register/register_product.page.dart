@@ -23,10 +23,15 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
   final heightController = TextEditingController();
   final widthController = TextEditingController();
   final depthController = TextEditingController();
+  final retailController = TextEditingController();
+  final wholesaleRetailController = TextEditingController();
+  final wholesaleMajorController = TextEditingController();
   final descriptionController = TextEditingController();
+  late final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
+    formKey = GlobalKey<FormState>();
     productCommand = const ProductCommand(
       code: null,
       supplier: null,
@@ -36,6 +41,8 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
       width: null,
       depth: null,
       retail: null,
+      wholesaleRetail: null,
+      wholesaleMajor: null,
       images: null,
       brand: null,
     );
@@ -75,12 +82,49 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
             : double.parse(depthController.text),
       );
     });
+    retailController.addListener(() {
+      productCommand = productCommand.copyWith(
+        retail: retailController.text.isEmpty
+            ? 0.0
+            : double.parse(retailController.text),
+      );
+    });
+    wholesaleRetailController.addListener(() {
+      productCommand = productCommand.copyWith(
+        wholesaleRetail: wholesaleRetailController.text.isEmpty
+            ? 0.0
+            : double.parse(wholesaleRetailController.text),
+      );
+    });
+    wholesaleMajorController.addListener(() {
+      productCommand = productCommand.copyWith(
+        wholesaleMajor: wholesaleMajorController.text.isEmpty
+            ? 0.0
+            : double.parse(wholesaleMajorController.text),
+      );
+    });
     descriptionController.addListener(() {
       productCommand = productCommand.copyWith(
         description: descriptionController.text,
       );
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    codeController.dispose();
+    supplierController.dispose();
+    yearController.dispose();
+    brandController.dispose();
+    heightController.dispose();
+    widthController.dispose();
+    depthController.dispose();
+    retailController.dispose();
+    wholesaleRetailController.dispose();
+    wholesaleMajorController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -112,6 +156,7 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
                         Padding(
                           padding: const EdgeInsets.only(right: 24.0),
                           child: FieldWidget(
+                            formKey: formKey,
                             codeController: codeController,
                             supplierController: supplierController,
                             yearController: yearController,
@@ -119,6 +164,10 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
                             heightController: heightController,
                             widthController: widthController,
                             depthController: depthController,
+                            retailController: retailController,
+                            wholesaleRetailController:
+                                wholesaleRetailController,
+                            wholesaleMajorController: wholesaleMajorController,
                             descriptionController: descriptionController,
                             images: (value) {
                               productCommand =
@@ -136,11 +185,13 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
                       onPressed: state is RegisterProductInProgress
                           ? null
                           : () {
-                              context
-                                  .read<RegisterProductBloc>()
-                                  .add(RegisterProductSaved(
-                                    productCommand: productCommand,
-                                  ));
+                              if (formKey.currentState!.validate()) {
+                                context
+                                    .read<RegisterProductBloc>()
+                                    .add(RegisterProductSaved(
+                                      productCommand: productCommand,
+                                    ));
+                              }
                             },
                       style: const ButtonStyle(
                         minimumSize: MaterialStatePropertyAll<Size>(
@@ -149,6 +200,9 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
                         maximumSize: MaterialStatePropertyAll<Size>(
                           Size(350.0, 80.0),
                         ),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                          Color(0xFFB5FFB9),
+                        ),
                       ),
                       child: state is RegisterProductInProgress
                           ? const CircularProgressIndicator()
@@ -156,13 +210,13 @@ class _RegisterProductPageState extends State<RegisterProductPage> {
                               'Registrar',
                               style: TextStyle(
                                 fontSize: 24.0,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                     );
                   },
                 ),
-                const SizedBox(height: 24.0),
+                const SizedBox(height: 32.0),
               ],
             ),
           ),

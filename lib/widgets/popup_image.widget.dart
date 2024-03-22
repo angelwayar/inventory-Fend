@@ -83,6 +83,7 @@ class _PopUpImageWidgetState extends State<PopUpImageWidget> {
             ],
           ),
         ),
+        const SizedBox(height: 24.0),
         PaginationWidget(
           length: widget.images?.length ?? 0,
           indexSelected: indexPage.toInt(),
