@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../utils/decimal_text_input.util.dart';
+import '../../utils/uppercase_text_input.util.dart';
 import '../../widgets/widgets.dart';
 
 class FieldWidget extends StatelessWidget {
@@ -75,6 +76,7 @@ class FieldWidget extends StatelessWidget {
                     children: [
                       TextFormField(
                         controller: codeController,
+                        inputFormatters: const [UpperCaseTextFormatter()],
                         decoration: const InputDecoration(
                           labelText: 'Código',
                         ),
@@ -87,24 +89,28 @@ class FieldWidget extends StatelessWidget {
                       ),
                       TextField(
                         controller: supplierController,
+                        inputFormatters: const [UpperCaseTextFormatter()],
                         decoration: const InputDecoration(
                           labelText: 'Proveedor',
                         ),
                       ),
                       TextField(
                         controller: yearController,
+                        inputFormatters: const [UpperCaseTextFormatter()],
                         decoration: const InputDecoration(
                           labelText: 'Año',
                         ),
                       ),
                       TextField(
                         controller: brandController,
+                        inputFormatters: const [UpperCaseTextFormatter()],
                         decoration: const InputDecoration(
                           labelText: 'Marca',
                         ),
                       ),
                       TextField(
                         controller: descriptionController,
+                        inputFormatters: const [UpperCaseTextFormatter()],
                         decoration: const InputDecoration(
                           labelText: 'Descripción',
                         ),

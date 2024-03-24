@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_fend/pages/list_product.content.dart';
-import 'package:inventory_fend/widgets/cubit/menu_cubit.dart';
+import 'package:inventory_fend/widgets/menu/menu_cubit.dart';
 import 'package:inventory_fend/widgets/widgets.dart';
 
 import '../blocs/blocs.dart';
 import '../injection.dart';
+import '../widgets/filter/filter_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -33,7 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
           create: (context) => productBloc..add(const ProductFetched()),
         ),
         BlocProvider(create: (context) => Injector.getIt<DeleteBloc>()),
-        BlocProvider(create: (context) => MenuCubit())
+        BlocProvider(create: (context) => MenuCubit()),
+        BlocProvider(create: (context) => FilterCubit()),
       ],
       child: BlocListener<DeleteBloc, DeleteState>(
         listener: (context, state) {
@@ -45,26 +47,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Scaffold(
           body: Column(
             children: [
-              const HeaderWidget(),
+              HeaderWidget(
+                onPressed: ({required criteria, required value}) {
+                  productBloc.add(
+                    ProductFetched(page: 1, criteria: criteria, value: value),
+                  );
+                },
+              ),
               Expanded(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
                       width: 350.0,
-                      child: BlocBuilder<ProductBloc, ProductState>(
-                        buildWhen: (previous, current) =>
-                            previous.status == Status.inital &&
-                            current.status == Status.success,
-                        builder: (context, state) {
-                          return MenuWidget(
-                            totalPages: state.status == Status.success
-                                ? state.result!.totalPages
-                                : 0,
-                            deleteProduct: (value) => isDeleteEnable = value,
-                            updateProduct: (value) => isUpdateEnable = value,
-                          );
-                        },
+                      child: MenuWidget(
+                        deleteProduct: (value) => isDeleteEnable = value,
+                        updateProduct: (value) => isUpdateEnable = value,
                       ),
                     ),
                     const VerticalDivider(),

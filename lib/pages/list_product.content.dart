@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_fend/blocs/blocs.dart';
 import 'package:inventory_fend/models/models.dart';
 import 'package:inventory_fend/pages/update_register/update_product.page.dart';
-import 'package:inventory_fend/widgets/cubit/menu_cubit.dart';
+import 'package:inventory_fend/widgets/menu/menu_cubit.dart';
 
 import '../widgets/widgets.dart';
 

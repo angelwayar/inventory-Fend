@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inventory_fend/widgets/cubit/menu_cubit.dart';
+import 'package:inventory_fend/widgets/menu/menu_cubit.dart';
 
 import '../blocs/blocs.dart';
 import '../pages/register/register_product.page.dart';
@@ -9,12 +9,10 @@ import '../pages/register/register_product.page.dart';
 class MenuWidget extends StatefulWidget {
   const MenuWidget({
     super.key,
-    required this.totalPages,
     required this.deleteProduct,
     required this.updateProduct,
   });
 
-  final int totalPages;
   final ValueChanged<bool> deleteProduct;
   final ValueChanged<bool> updateProduct;
 
@@ -23,6 +21,7 @@ class MenuWidget extends StatefulWidget {
 }
 
 class _MenuWidgetState extends State<MenuWidget> {
+  int? totalPages = 0;
   bool delete = false;
   bool update = false;
   final formKey = GlobalKey<FormState>();
@@ -170,13 +169,18 @@ class _MenuWidgetState extends State<MenuWidget> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Total de páginas: ${widget.totalPages}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.deepPurple[600],
-                ),
+              BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  totalPages = state.result?.totalPages;
+                  return Text(
+                    'Total de páginas: ${totalPages ?? 0}',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.deepPurple[600],
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 width: 120.0,
@@ -194,7 +198,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                         return 'Ingresar una valor.';
                       } else {
                         final page = int.parse(value);
-                        if (page > widget.totalPages) {
+                        if (page > totalPages!) {
                           return 'El número de página\ntiene que ser menor.';
                         }
                       }
