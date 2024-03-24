@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
 class ErrorImage extends StatelessWidget {
-  const ErrorImage({super.key});
+  const ErrorImage({
+    super.key,
+    this.width,
+    this.borderRadius = const BorderRadius.only(
+      topLeft: Radius.circular(15.0),
+      bottomLeft: Radius.circular(15.0),
+    ),
+  });
+  final BorderRadiusGeometry borderRadius;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 280.0,
-      width: 400.0,
-      decoration: const BoxDecoration(
+      width: width,
+      decoration: BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          bottomLeft: Radius.circular(15.0),
-        ),
+        borderRadius: borderRadius,
       ),
       child: const Center(
         child: Text(

@@ -5,6 +5,8 @@ import 'package:inventory_fend/models/models.dart';
 import 'package:inventory_fend/pages/update_register/update_product.page.dart';
 import 'package:inventory_fend/widgets/menu/menu_cubit.dart';
 
+import '../widgets/custom_card.widget.dart';
+import '../widgets/view/view_cubit.dart';
 import '../widgets/widgets.dart';
 
 class ListProductContent extends StatefulWidget {
@@ -85,24 +87,54 @@ class _ListProductContentState extends State<ListProductContent> {
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 24.0),
-        child: ListView.builder(
-          controller: scrollController,
-          itemCount: widget.hasReachedMax
-              ? widget.products.length
-              : widget.products.length + 1,
-          itemBuilder: (context, index) {
-            if (index >= widget.products.length) {
-              return const LinearProgressIndicator();
-            }
-            final productResult = widget.products[index];
-            return Padding(
-              padding: const EdgeInsets.only(right: 24.0),
-              child: CardWidget(
-                productResult: productResult,
-                valueChanged: (value) {
-                  submit(value);
+        child: BlocBuilder<ViewCubit, ViewState>(
+          builder: (context, state) {
+            if (!state.isList) {
+              return GridView.builder(
+                controller: scrollController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemCount: widget.hasReachedMax
+                    ? widget.products.length
+                    : widget.products.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= widget.products.length) {
+                    return const LinearProgressIndicator();
+                  }
+                  final productResult = widget.products[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 24.0),
+                    child: CustomCardWidget(
+                      productResult: productResult,
+                      valueChanged: (value) {
+                        submit(value);
+                      },
+                    ),
+                  );
                 },
-              ),
+              );
+            }
+            return ListView.builder(
+              controller: scrollController,
+              itemCount: widget.hasReachedMax
+                  ? widget.products.length
+                  : widget.products.length + 1,
+              itemBuilder: (context, index) {
+                if (index >= widget.products.length) {
+                  return const LinearProgressIndicator();
+                }
+                final productResult = widget.products[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: CardWidget(
+                    productResult: productResult,
+                    valueChanged: (value) {
+                      submit(value);
+                    },
+                  ),
+                );
+              },
             );
           },
         ),

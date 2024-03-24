@@ -43,7 +43,10 @@ class _CardWidgetState extends State<CardWidget> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ImageContentWidget(productResult: widget.productResult),
+            ImageContentWidget(
+              productResult: widget.productResult,
+              width: 400.0,
+            ),
             const SizedBox(width: 36.0),
             Expanded(
               child: SizedBox(

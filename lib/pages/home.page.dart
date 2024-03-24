@@ -7,6 +7,7 @@ import 'package:inventory_fend/widgets/widgets.dart';
 import '../blocs/blocs.dart';
 import '../injection.dart';
 import '../widgets/filter/filter_cubit.dart';
+import '../widgets/view/view_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -36,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
         BlocProvider(create: (context) => Injector.getIt<DeleteBloc>()),
         BlocProvider(create: (context) => MenuCubit()),
         BlocProvider(create: (context) => FilterCubit()),
+        BlocProvider(create: (context) => ViewCubit()),
       ],
       child: BlocListener<DeleteBloc, DeleteState>(
         listener: (context, state) {

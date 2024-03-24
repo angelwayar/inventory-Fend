@@ -5,6 +5,7 @@ import 'package:inventory_fend/widgets/menu/menu_cubit.dart';
 
 import '../blocs/blocs.dart';
 import '../pages/register/register_product.page.dart';
+import 'view/view_cubit.dart';
 
 class MenuWidget extends StatefulWidget {
   const MenuWidget({
@@ -152,6 +153,32 @@ class _MenuWidgetState extends State<MenuWidget> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+            );
+          },
+        ),
+        const SizedBox(height: 24.0),
+        BlocBuilder<ViewCubit, ViewState>(
+          builder: (context, state) {
+            return ElevatedButton(
+              onPressed: () => context.read<ViewCubit>().onChangeView(
+                    value: !state.isList,
+                  ),
+              style: ButtonStyle(
+                minimumSize: const MaterialStatePropertyAll<Size>(
+                  Size(350.0, 80.0),
+                ),
+                backgroundColor: state.isList
+                    ? const MaterialStatePropertyAll<Color>(Colors.deepPurple)
+                    : MaterialStatePropertyAll<Color>(Colors.indigo[900]!),
+              ),
+              child: Text(
+                state.isList ? 'Lista' : 'Cuadricula',
+                style: const TextStyle(
+                  fontSize: 24.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             );
           },
         ),
